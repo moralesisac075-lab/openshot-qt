@@ -151,6 +151,29 @@ class MainWindow(updates.UpdateWatcher, QMainWindow):
 
     # Save window settings on close
     def closeEvent(self, event):
+        # =====================================================================
+        # TALLER 003: C. SEGURIDAD Y PRIVACIDAD (LIMPIEZA AL CERRAR)
+        # =====================================================================
+        try:
+            import os
+            import shutil
+            from src.classes import settings
+            from src.classes import info
+
+            # 1. Vaciar el historial de proyectos recientes
+            settings.get_settings().set("recent_menus", [])
+
+            # 2. Eliminar de forma segura la carpeta temporal de metadatos/caché
+            temp_path = os.path.join(info.USER_PATH, "thumbnail")
+            if os.path.exists(temp_path):
+                shutil.rmtree(temp_path, ignore_errors=True)
+
+            print("INFO: Protocolo de privacidad ejecutado. Historial y temporales eliminados.")
+        except Exception as e:
+            print(f"Error en limpieza de privacidad: {e}")
+
+        # Aquí continúa el código original de OpenShot sin alteraciones:
+        app = get_app()
         app = get_app()
 
         # Prompt user to save (if needed)
